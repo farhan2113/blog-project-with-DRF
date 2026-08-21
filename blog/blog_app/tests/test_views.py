@@ -1,0 +1,93 @@
+from test_models import create_post, create_user, create_comment
+from django.urls import reverse
+from rest_framework.test import APITestCase
+
+class TestPostViewSet(APITestCase):
+    def test_get_posts(self):
+        url = reverse('post-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_create_posts(self):
+        user = create_user()
+        data = {'title':'title', 'body':'body', 'owner':user}
+        url = reverse('post-list')
+        response = self.client.post(url, data=data, content_type='json')
+        self.assertEqual(response.status_code, 201)
+
+
+    def test_retrieve_post(self):
+        user = create_user()
+        post = create_post(body='body', title='title', owner=user)
+        url = reverse('post-detail', args=(post.pk, ))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_post(self):
+        user = create_user()
+        post = create_post(body='body', title='title', owner=user)
+        url = reverse('post-detail', args=(post.pk, ))
+        data = {'body':'updated body', 'title':'updated title', 'post':post, 'owner': user}        
+        response = self.client.put(url, data=data, content_type='json')
+        self.assertEqual(response.status_code, 201)
+
+    def test_delete_post(self):
+        user = create_user()
+        post = create_post(title='title', body='body', owner=user)
+
+        url = reverse('post-detail', args=(post.pk, ))
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, 203)
+
+class TestCommentViewSet(APITestCase):
+    def test_get_comments(self):
+        url = reverse('comment-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_comment(self):
+        user = create_user()
+        post = create_post(title='title', body='body', owner=user)
+        url = reverse('comment-list')
+        data = {'body':'body', 'post':post, 'owner':user}
+        response = self.client.post(url, data=data, content_type='json')
+        self.assertEqual(response.status_code, 201)
+
+    def test_retrieve_comment(self):
+        user = create_user()
+        post = create_post(title='title', body='body', owner=user)       
+        comment = create_comment(body='body', owner=user, post=post)
+
+        url = reverse('comment-detail', args=(comment.pk, ))
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_update_comment(self):
+        user = create_user()
+        post = create_post(title= 'title', body='body', owner=user)
+        comment = create_comment(body='body', post=post, owner=user)
+
+        url = reverse('comment-detail', args=comment.pk)
+        data = {'body':'updated body', 'post':post, 'owner':user}
+        response = self.client.put(url, data=data, content_type='json')
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_comment(self):
+        user = create_user()
+        post = create_post(title= 'title', body='body', owner=user)
+        comment = create_comment(body='body', post=post, owner=user)
+
+        url = reverse('comment-detail', args=(comment.pk, ))
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, 203)
+
+    
+    
+
