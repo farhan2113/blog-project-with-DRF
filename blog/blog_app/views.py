@@ -34,14 +34,10 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class SignUpApiView(views.APIView):
-    serializer = UserSerializer
     permission_classes = [permissions.AllowAny]
-    def get(self, request):
-        data = self.serializer(User)
-        return Response(data, status=status.HTTP_200_OK)
     def post(self, request):
-        self.serializer(data=request.data)
-        if self.serializer.is_valid():
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
             user = request.user
             refresh_token = RefreshToken.for_user(user)
             access_token = refresh_token.access_token
@@ -68,16 +64,15 @@ class SignUpApiView(views.APIView):
             )
 
             return response
+        else:
+            return Response(serializer.errors)
 
 
 
 
 class LogInApiView(views.APIView):
-    serializer = LogInSerializer
+
     permission_classes = [permissions.AllowAny]
-    def get(self, request):
-        data = self.serializer(User)
-        return Response(data, status=status.HTTP_200_OK)
     def post(self, request):
         username = request.data['username']
         email = request.data['email']
