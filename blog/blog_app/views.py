@@ -124,4 +124,11 @@ class RefreshAcessTokenApiView(views.APIView):
         except (InvalidToken, TokenError):
             return Response({'detail':'invalid token'})
         
+class LogOutApiView(views.APIView):
+    def post(self, request):
+        response = Response({'detail':'loged out successfully'})
+        response.delete_cookie(key='refresh_token', samesite='Lax')
+        response.delete_cookie(key='access_token', samesite='Lax') 
+        return response
+
             
