@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.response import Response
 from rest_framework import status
-
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 User = get_user_model()
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -34,6 +34,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class SignUpApiView(views.APIView):
+    serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -49,7 +50,7 @@ class SignUpApiView(views.APIView):
             response = Response(data, status=status.HTTP_201_CREATED)
             response.set_cookie(
                 key='refresh_token',
-                value=refresh_token,
+                value=str(refresh_token),
                 httponly=True,
                 secure=False,
                 samesite='Lax'
@@ -57,7 +58,7 @@ class SignUpApiView(views.APIView):
 
             response.set_cookie(
                 key='access_token',
-                value=access_token,
+                value=str(access_token),
                 httponly=True,
                 secure=False,
                 samesite='Lax'
@@ -71,7 +72,7 @@ class SignUpApiView(views.APIView):
 
 
 class LogInApiView(views.APIView):
-
+    serializer_class = LogInSerializer
     permission_classes = [permissions.AllowAny]
     def post(self, request):
         username = request.data['username']
@@ -84,14 +85,14 @@ class LogInApiView(views.APIView):
             access_token = refresh_token.access_token
             response.set_cookie(
                 key='refresh_token',
-                value= refresh_token,
+                value= str(refresh_token),
                 httponly=True,
                 secure=False,
                 samesite='Lax'
             )
             response.set_cookie(
                 key='access_token',
-                value= access_token,
+                value= str(access_token),
                 httponly=True,
                 secure=False,
                 samesite='Lax'
@@ -105,6 +106,22 @@ class LogInApiView(views.APIView):
 
 
 
-        
+class RefreshAcessTokenApiView(views.APIView):
+    def post(self, request):
+        refresh_token = request.data.get('refresh_token')
+        try :
+            token = RefreshToken(refresh_token)
+            access_token = token.access_token
+            response = Response({'detail':'access token refreshed'})
+            response.set_cookie(
+                key='access_token',
+                value=str(access_token),
+                samesite='Lax',
+                httponly=True,
+                secure=False
+            )
+            return response
+        except (InvalidToken, TokenError):
+            return Response({'detail':'invalid token'})
         
             

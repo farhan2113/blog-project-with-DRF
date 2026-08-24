@@ -72,6 +72,13 @@ TEMPLATES = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'default_authentication_classes': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
+
 WSGI_APPLICATION = 'blog.wsgi.application'
 
 

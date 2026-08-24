@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, CommentViewSet, SignUpApiView, LogInApiView
+from .views import PostViewSet, CommentViewSet, SignUpApiView, LogInApiView, RefreshAcessTokenApiView
 
 router = DefaultRouter()
 router.register(r'posts', PostViewSet, basename='post')
@@ -10,5 +10,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('signup/', SignUpApiView.as_view(), name= 'sign-up'),
     path('login/', LogInApiView.as_view(), name= 'log-in'),
+    path('refresh-access-token/', RefreshAcessTokenApiView.as_view(), name='refresh-access-token'),
     
 ]
