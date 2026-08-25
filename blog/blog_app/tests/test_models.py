@@ -1,11 +1,11 @@
 from django.test import TestCase
-from models import Post, Comment
+from ..models import Post, Comment
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 def create_user():
-    user = User(first_name= 'first_name', last_name= 'last_name')
+    user = User(first_name= 'first_name', last_name= 'last_name', username='username', password='password')
     user.save()
     return user
 
@@ -31,10 +31,10 @@ class TestPost(TestCase):
         post = create_post(title= 'title', body= 'body', owner=user)
         self.assertEqual(post.body, 'body')
 
-    def test_if_post_has_user(self):
+    def test_if_post_has_owner(self):
         user = create_user()
         post = create_post(title= 'title', body= 'body', owner=user)
-        self.assertEqual(post.owner_id, 1)
+        self.assertEqual(post.owner_id, user.id)
 
 
 class TestComment(TestCase):
@@ -48,10 +48,10 @@ class TestComment(TestCase):
         user = create_user()
         post = create_post(title='title', body= 'body', owner=user)
         comment = create_comment(body='body', post=post, owner= user)
-        self.assertEqual(comment.post_id, 1)
+        self.assertEqual(comment.post_id, post.id)
 
     def test_if_comment_related_to_user(self):
         user = create_user()
         post = create_post(title='title', body= 'body', owner=user)
         comment = create_comment(body='body', post=post, owner= user)
-        self.assertEqual(comment.owner_id, 1)        
+        self.assertEqual(comment.owner_id, user.id)        

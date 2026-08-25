@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from test_models import create_user, create_post, create_comment
+from .test_models import create_user, create_post, create_comment
 
 class TestPostListUrl(TestCase):
     def test_post_list_url(self):
@@ -31,7 +31,7 @@ class TestCommentDetailUrl(TestCase):
         user = create_user()
         post = create_post(title= 'title', body='body', owner=user)
         comment = create_comment(body='body', owner=user, post=post)
-        url = reverse('comment-detail', args=(comment.pk))
+        url = reverse('comment-detail', args=(comment.pk, ))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
