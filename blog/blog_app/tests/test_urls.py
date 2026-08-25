@@ -35,3 +35,29 @@ class TestCommentDetailUrl(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+
+class TestSignUpUrl(TestCase):
+    def test_sign_up_url(self):
+        url = reverse('sign-up')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
+
+class TestLoginUrl(TestCase):
+    def test_login_url(self):
+        url = reverse('login')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
+
+
+class TestRefreshAccessTokenUrl(TestCase):
+    def test_refresh_access_token_url(self):
+        url = reverse('refresh-access-token')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
+
+
+class TestLogOutUrl(TestCase):
+    def test_logout_url(self):
+        url = reverse('logout')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)

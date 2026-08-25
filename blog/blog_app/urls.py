@@ -9,7 +9,7 @@ router.register(r'comments', CommentViewSet, basename='comment')
 urlpatterns = [
     path('', include(router.urls)),
     path('signup/', SignUpApiView.as_view(), name= 'sign-up'),
-    path('login/', LogInApiView.as_view(), name= 'log-in'),
+    path('login/', LogInApiView.as_view(), name= 'login'),
     path('refresh-access-token/', RefreshAcessTokenApiView.as_view(), name='refresh-access-token'),
     path('logout/', LogOutApiView.as_view(), name='logout'),
 ]
