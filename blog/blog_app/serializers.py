@@ -3,7 +3,7 @@ from .models import Post, Comment
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.contrib.auth import password_validation
-from rest_framework import status
+
 User = get_user_model()
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
         password_2 = validated_data['password_2']
 
         if password != password_2:
-            raise serializers.ValidationError('the two password fields are not have the same value.', status = status.HTTP_401_UNAUTHORIZED)
+            raise serializers.ValidationError('the two password fields are not have the same value.')
 
         print(validate_email(email))
 

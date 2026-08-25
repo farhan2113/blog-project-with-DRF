@@ -42,7 +42,7 @@ class SignUpApiView(views.APIView):
             user = request.user
             refresh_token = RefreshToken.for_user(user)
             access_token = refresh_token.access_token
-            self.serializer.save()
+            serializer.save()
             data = {
                 'username':user.username,
                 'email':user.email
