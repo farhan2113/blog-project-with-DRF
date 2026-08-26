@@ -107,3 +107,14 @@ class TestSignUpApiView(APITestCase):
         url = reverse('sign-up')
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, 201)
+
+
+class TestLogInApiView(APITestCase):
+    def test_login(self):
+        url = reverse('login')
+        create_user()
+        data = {'username':'username', 'password':'password'}
+
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, 200)
