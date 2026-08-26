@@ -1,3 +1,5 @@
+import re
+
 from .test_models import create_post, create_user, create_comment
 from django.urls import reverse
 from rest_framework.test import APITestCase
@@ -116,5 +118,17 @@ class TestLogInApiView(APITestCase):
         data = {'username':'username', 'password':'password'}
 
         response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, 200)
+
+
+class TestRefreshAcessTokenApiView(APITestCase):
+    def test_refresh_access_token(self):
+        login_url = reverse('login')
+        data = {'username':'username', 'password':'password'}
+        self.client.post(login_url, data, format= 'json')
+
+        url = reverse('refresh-access-token')
+        response = self.client.post(url)
 
         self.assertEqual(response.status_code, 200)
