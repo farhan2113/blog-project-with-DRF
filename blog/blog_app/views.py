@@ -75,9 +75,9 @@ class LogInApiView(views.APIView):
     serializer_class = LogInSerializer
     permission_classes = [permissions.AllowAny]
     def post(self, request):
-        username = request.data['username']
-        email = request.data['email']
-        password = request.data['password']
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
         try:
             user = User.objects.get(username= username, email= email, password= password)
             response = Response({'detail':'loged in sccessfully'}, status=status.HTTP_200_OK)
