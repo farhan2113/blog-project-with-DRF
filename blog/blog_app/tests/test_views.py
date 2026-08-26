@@ -132,3 +132,10 @@ class TestRefreshAcessTokenApiView(APITestCase):
         response = self.client.post(url)
 
         self.assertEqual(response.status_code, 200)
+
+
+class TestLogOutApiView(APITestCase):
+    def test_logout(self):
+        url = reverse('logout')
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)
