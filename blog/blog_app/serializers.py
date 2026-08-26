@@ -25,7 +25,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password_2 = serializers.CharField()
+    password_2 = serializers.CharField(write_only=True)
     email = serializers.CharField()
     class Meta:
         model= User
@@ -35,19 +35,19 @@ class UserSerializer(serializers.ModelSerializer):
         username = validated_data['username']
         email = validated_data['email']
         password = validated_data['password']
-        password_2 = validated_data['password_2']
+        password_2 = validated_data.pop('password_2')
 
         if password != password_2:
             raise serializers.ValidationError('the two password fields are not have the same value.')
 
         print(validate_email(email))
 
-        validated_data.pop('password_2')
+    
         
         user = User.objects.create(username=username, password= password, email= email)
         user.save()
 
-        return user
+        return validated_data
 
 
 class LogInSerializer(serializers.ModelSerializer):

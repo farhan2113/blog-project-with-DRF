@@ -103,7 +103,7 @@ class TestCommentViewSet(APITestCase):
 
 class TestSignUpApiView(APITestCase):
     def test_sign_up(self):
-        data = {'username':'username', 'email':'example@example.com','password':'password', 'password_2':'password_2'}
+        data = {'username':'username', 'email':'example@example.com','password':'password', 'password_2':'password'}
         url = reverse('sign-up')
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, 201)

@@ -44,8 +44,8 @@ class SignUpApiView(views.APIView):
             access_token = refresh_token.access_token
             serializer.save()
             data = {
-                'username':user.username,
-                'email':user.email
+                'username':request.data['username'],
+                'email':request.data['email']
             }
             response = Response(data, status=status.HTTP_201_CREATED)
             response.set_cookie(
