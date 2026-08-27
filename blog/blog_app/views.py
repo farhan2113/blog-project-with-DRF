@@ -39,10 +39,9 @@ class SignUpApiView(views.APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user = request.user
+            user = serializer.save()
             refresh_token = RefreshToken.for_user(user)
             access_token = refresh_token.access_token
-            serializer.save()
             data = {
                 'username':request.data['username'],
                 'email':request.data['email'],
