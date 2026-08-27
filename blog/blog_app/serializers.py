@@ -44,15 +44,17 @@ class UserSerializer(serializers.ModelSerializer):
         except DjangoValidationError as e:
             raise serializers.ValidationError(e.messages)
 
+    def validate(self, attrs):
+        password = attrs['password']
+        password_2 = attrs['password_2']
+        if password != password_2:
+            raise serializers.ValidationError('the two password fields are not have the same value.')  
         
     def create(self, validated_data):
         username = validated_data['username']
         email = validated_data['email']
         password = validated_data['password']
         password_2 = validated_data.pop('password_2')
-
-        if password != password_2:
-            raise serializers.ValidationError('the two password fields are not have the same value.')
 
         user = User.objects.create(username=username, email= email)
         user.set_password(password)
