@@ -58,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
 
-        return validated_data
+        return user
 
 
 class LogInSerializer(serializers.ModelSerializer):
