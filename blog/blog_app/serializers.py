@@ -3,7 +3,7 @@ from .models import Post, Comment
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.contrib.auth import password_validation
-
+from django.core.exceptions import ValidationError as DjangoValidationError
 User = get_user_model()
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,6 +31,20 @@ class UserSerializer(serializers.ModelSerializer):
         model= User
         fields = ['username', 'email', 'password', 'password_2']
 
+
+    def validate_email(self, value):
+        try:
+            validate_email(value)
+        except DjangoValidationError as e:
+            raise serializers.ValidationError(e.messages)
+
+    def validate_password(self, value):
+        try:
+            password_validation.validate_password(password=value)
+        except DjangoValidationError as e:
+            raise serializers.ValidationError(e.messages)
+
+        
     def create(self, validated_data):
         username = validated_data['username']
         email = validated_data['email']
@@ -40,11 +54,8 @@ class UserSerializer(serializers.ModelSerializer):
         if password != password_2:
             raise serializers.ValidationError('the two password fields are not have the same value.')
 
-        print(validate_email(email))
-
-    
-        
-        user = User.objects.create(username=username, password= password, email= email)
+        user = User.objects.create(username=username, email= email)
+        user.set_password(password)
         user.save()
 
         return validated_data
