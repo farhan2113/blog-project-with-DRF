@@ -45,20 +45,13 @@ class SignUpApiView(views.APIView):
             serializer.save()
             data = {
                 'username':request.data['username'],
-                'email':request.data['email']
+                'email':request.data['email'],
+                'access':str(access_token)
             }
             response = Response(data, status=status.HTTP_201_CREATED)
             response.set_cookie(
                 key='refresh_token',
                 value=str(refresh_token),
-                httponly=True,
-                secure=False,
-                samesite='Lax'
-            )
-
-            response.set_cookie(
-                key='access_token',
-                value=str(access_token),
                 httponly=True,
                 secure=False,
                 samesite='Lax'
@@ -80,9 +73,9 @@ class LogInApiView(views.APIView):
         password = request.data.get('password')
         try:
             user = User.objects.get(username= username, email= email, password= password)
-            response = Response({'detail':'loged in sccessfully'}, status=status.HTTP_200_OK)
             refresh_token = RefreshToken.for_user(user)
             access_token = refresh_token.access_token
+            response = Response({'detail':'loged in sccessfully', 'access':str(access_token)}, status=status.HTTP_200_OK)
             response.set_cookie(
                 key='refresh_token',
                 value= str(refresh_token),
@@ -90,13 +83,7 @@ class LogInApiView(views.APIView):
                 secure=False,
                 samesite='Lax'
             )
-            response.set_cookie(
-                key='access_token',
-                value= str(access_token),
-                httponly=True,
-                secure=False,
-                samesite='Lax'
-            )
+            
             return response
         except Exception as e:
             response = Response({'detail':'please enter the correct usernme and email and password'})
@@ -112,14 +99,8 @@ class RefreshAcessTokenApiView(views.APIView):
         try :
             token = RefreshToken(refresh_token)
             access_token = token.access_token
-            response = Response({'detail':'access token refreshed'})
-            response.set_cookie(
-                key='access_token',
-                value=str(access_token),
-                samesite='Lax',
-                httponly=True,
-                secure=False
-            )
+            response = Response({'access':str(access_token)})
+
             return response
         except (InvalidToken, TokenError):
             return Response({'detail':'invalid token'})
@@ -127,8 +108,7 @@ class RefreshAcessTokenApiView(views.APIView):
 class LogOutApiView(views.APIView):
     def post(self, request):
         response = Response({'detail':'loged out successfully'})
-        response.delete_cookie(key='refresh_token', samesite='Lax')
-        response.delete_cookie(key='access_token', samesite='Lax') 
+        response.delete_cookie(key='refresh_token', samesite='Lax') 
         return response
 
             
