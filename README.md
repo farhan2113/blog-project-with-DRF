@@ -21,7 +21,11 @@ git clone [https://github.com/farhan2113/blog-project-with-DRF.git](https://gith
 python3 -m venv .venv
 ```
 
-3. install packages
+3. Active virtual environment
+
+the activation may differ between operating systems
+
+4. install packages
 
 * Django
 ```bash
