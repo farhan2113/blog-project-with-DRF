@@ -1,6 +1,6 @@
 # blog-project-with-DRF
 
-This is a blog project that provides APIs for creating posts and comments and delete theme or update theme and retrieve theme and it provides APIs for sign up and login and refresh access token.
+This is a blog project that provides APIs for retrieving and creating posts and comments and delete theme or update theme and it provides APIs for sign up and login and refresh access token and logout.
 
 ## Requirements
 
@@ -24,7 +24,25 @@ python3 -m venv .venv
 3. install packages
 
 * Django
+```bash
+pip install Django
+```
+
 * DRF
+```bash
+pip install djangorestframework
+```
 * python-dotenv
+```bash
+pip install python-dotenv
+```
+
 * psycopg
+```bash
+pip install "psycopg[binary]"
+```
+
 * djangorestframework-simplejwt
+```bash
+pip install djangorestframework-simplejwt
+```
