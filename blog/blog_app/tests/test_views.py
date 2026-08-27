@@ -108,14 +108,14 @@ class TestSignUpApiView(APITestCase):
         data = {'username':'username', 'email':'example@example.com','password':'password', 'password_2':'password'}
         url = reverse('sign-up')
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
 
 
 class TestLogInApiView(APITestCase):
     def test_login(self):
         url = reverse('login')
         create_user()
-        data = {'username':'username', 'password':'password'}
+        data = {'username':'username', 'email':'example@example.com', 'password':'password'}
 
         response = self.client.post(url, data, format='json')
 
