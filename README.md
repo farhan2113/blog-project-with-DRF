@@ -50,3 +50,22 @@ pip install "psycopg[binary]"
 ```bash
 pip install djangorestframework-simplejwt
 ```
+
+## setup .env
+
+1. create .env file in blog folder
+
+```bash
+touch .env
+```
+
+2. add info to .env
+
+```bash
+DB_USER=the data base user
+DB_NAME=the data base name 
+DB_HOST=the data base host
+DB_PORT=the data base port
+DB_PASSWORD=the data base password
+SECRET_KEY=the SECRET_KEY
+```
