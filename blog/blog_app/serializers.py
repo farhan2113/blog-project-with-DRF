@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.contrib.auth import password_validation, authenticate
 from django.core.exceptions import ValidationError as DjangoValidationError
-from rest_framework import status
+
 User = get_user_model()
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -38,25 +38,25 @@ class UserSerializer(serializers.ModelSerializer):
             validate_email(value)
         except DjangoValidationError as e:
             raise serializers.ValidationError(e.messages)
+        return value
 
     def validate_password(self, value):
         try:
             password_validation.validate_password(password=value)
         except DjangoValidationError as e:
             raise serializers.ValidationError(e.messages)
+        return value
 
     def validate(self, attrs):
         password = attrs['password']
         password_2 = attrs['password_2']
         if password != password_2:
             raise serializers.ValidationError('the two password fields are not have the same value.')  
-        
+        return attrs
     def create(self, validated_data):
         username = validated_data['username']
         email = validated_data['email']
         password = validated_data['password']
-        password_2 = validated_data.pop('password_2')
-
         user = User.objects.create(username=username, email= email)
         user.set_password(password)
         user.save()
@@ -65,6 +65,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LogInSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=150, validators=[])
     def validate(self, attrs):
         username = attrs['username']
         email = attrs['email']
@@ -76,8 +77,7 @@ class LogInSerializer(serializers.ModelSerializer):
             attrs['user'] = user
             return attrs
         else:
-            raise serializers.ValidationError('login failed!')
-                                              
+            raise serializers.ValidationError('login failed!') 
     class Meta:
         model= User
         fields = ['username', 'email', 'password']
