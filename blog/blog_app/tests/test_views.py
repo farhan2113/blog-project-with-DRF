@@ -122,7 +122,7 @@ class TestLogInApiView(APITestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TestRefreshAcessTokenApiView(APITestCase):
+class TestRefreshAccessTokenApiView(APITestCase):
     def test_refresh_access_token(self):
         login_url = reverse('login')
         data = {'username':'username', 'password':'password'}

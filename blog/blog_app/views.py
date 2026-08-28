@@ -91,7 +91,7 @@ class LogInApiView(views.APIView):
 
 
 
-class RefreshAcessTokenApiView(views.APIView):
+class RefreshAccessTokenApiView(views.APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refresh_token')
         try :
