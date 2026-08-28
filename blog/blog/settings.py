@@ -76,7 +76,10 @@ REST_FRAMEWORK = {
     'default_authentication_classes': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':10,
+    
 }
 
 WSGI_APPLICATION = 'blog.wsgi.application'
