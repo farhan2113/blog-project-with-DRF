@@ -2,8 +2,9 @@ from rest_framework import serializers
 from .models import Post, Comment
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
-from django.contrib.auth import password_validation
+from django.contrib.auth import password_validation, authenticate
 from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework import status
 User = get_user_model()
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -64,6 +65,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LogInSerializer(serializers.ModelSerializer):
+    def validate(self, attrs):
+        username = attrs['username']
+        email = attrs['email']
+        password = attrs['password']
+        if not password and not email and not username:
+            raise serializers.ValidationError('please enter the username and password and email.')
+        user = authenticate(username=username, email= email, password= password)
+        if user:
+            attrs['user'] = user
+            return attrs
+        else:
+            raise serializers.ValidationError('login failed!', status= status.HTTP_401_UNAUTHORIZED)
+                                              
     class Meta:
         model= User
         fields = ['username', 'email', 'password']
