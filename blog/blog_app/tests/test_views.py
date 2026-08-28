@@ -125,7 +125,7 @@ class TestLogInApiView(APITestCase):
 class TestRefreshAccessTokenApiView(APITestCase):
     def test_refresh_access_token(self):
         login_url = reverse('login')
-        data = {'username':'username', 'password':'password'}
+        data = {'username':'username', 'password':'password', 'email':'example@example.com'}
         self.client.post(login_url, data, format= 'json')
 
         url = reverse('refresh-access-token')
