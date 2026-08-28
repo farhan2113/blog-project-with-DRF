@@ -67,26 +67,25 @@ class LogInApiView(views.APIView):
     serializer_class = LogInSerializer
     permission_classes = [permissions.AllowAny]
     def post(self, request):
-        username = request.data.get('username')
-        email = request.data.get('email')
-        password = request.data.get('password')
-        try:
-            user = User.objects.get(username= username, email= email, password= password)
-            refresh_token = RefreshToken.for_user(user)
-            access_token = refresh_token.access_token
-            response = Response({'detail':'loged in sccessfully', 'access':str(access_token)}, status=status.HTTP_200_OK)
-            response.set_cookie(
-                key='refresh_token',
-                value= str(refresh_token),
-                httponly=True,
-                secure=False,
-                samesite='Lax'
-            )
+        serializer = LogInSerializer(data= request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+        
+        user = serializer.validated_data['user']
+        refresh_token = RefreshToken.for_user(user)
+        access_token = refresh_token.access_token
+        response = Response({'detail':'loged in sccessfully', 'access':str(access_token)}, status=status.HTTP_200_OK)
+        response.set_cookie(
+            key='refresh_token',
+            value= str(refresh_token),
+            httponly=True,
+            secure=False,
+            samesite='Lax'
+        )
             
-            return response
-        except Exception as e:
-            response = Response({'detail':'please enter the correct usernme and email and password'})
-            return response
+        return response
+        
 
 
 
