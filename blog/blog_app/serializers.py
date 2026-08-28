@@ -76,7 +76,7 @@ class LogInSerializer(serializers.ModelSerializer):
             attrs['user'] = user
             return attrs
         else:
-            raise serializers.ValidationError('login failed!', status= status.HTTP_401_UNAUTHORIZED)
+            raise serializers.ValidationError('login failed!')
                                               
     class Meta:
         model= User
