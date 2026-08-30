@@ -73,7 +73,7 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    'default_authentication_classes': (
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
