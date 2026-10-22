@@ -29,26 +29,26 @@ the activation may differ between operating systems
 
 * Django
 ```bash
-pip install Django
+pip install Django==5.2.17
 ```
 
 * DRF
 ```bash
-pip install djangorestframework
+pip install djangorestframework==3.18.0
 ```
 * python-dotenv
 ```bash
-pip install python-dotenv
+pip install python-dotenv==1.2.3
 ```
 
 * psycopg
 ```bash
-pip install "psycopg[binary]"
+pip install "psycopg[binary]==3.3.4"
 ```
 
 * djangorestframework-simplejwt
 ```bash
-pip install djangorestframework-simplejwt
+pip install djangorestframework-simplejwt==5.5.1
 ```
 
 ## setup .env
